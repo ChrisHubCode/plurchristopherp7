@@ -3,17 +3,25 @@ const mongoose = require("mongoose");
 const bookRoutes = require("./routes/book");
 const userRoutes = require("./routes/user");
 const path = require("path");
+require("dotenv").config();
+const rateLimit = require("./middleware/rate-limit");
+const helmet = require("helmet");
 
 mongoose
-  .connect(
-    "mongodb+srv://devmaterhorn:Clustvieuxgrimoire1606@cluster0.nksn12x.mongodb.net/?retryWrites=true&w=majority",
-    { useNewUrlParser: true, useUnifiedTopology: true }
-  )
+  .connect(process.env.MONGODB_CONNECT, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => console.log("Connexion à MongoDB réussie !"))
   .catch(() => console.log("Connexion à MongoDB échouée !"));
 
 const app = express();
 app.use(express.json());
+app.use(
+  helmet({
+    crossOriginEmbedderPolicy: false,
+  })
+);
 
 app.use((req, res, next) => {
   //permet d'accéder à l'API depuis n'importe quelle origine
@@ -31,6 +39,7 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(rateLimit);
 app.use("/api/books", bookRoutes);
 app.use("/api/auth", userRoutes);
 app.use("/images", express.static(path.join(__dirname, "images")));

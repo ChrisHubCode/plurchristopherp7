@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const mongodbErrorHandler = require("mongoose-mongodb-errors");
 
 const bookSchema = mongoose.Schema({
   userId: { type: String, required: true },
@@ -7,8 +8,15 @@ const bookSchema = mongoose.Schema({
   year: { type: Number, required: true },
   imageUrl: { type: String, required: true },
   genre: { type: String, required: true },
-  ratings: [{ userId: { type: String }, grade: { type: Number } }],
+  ratings: [
+    {
+      userId: { type: String },
+      grade: { type: Number },
+    },
+  ],
   averageRating: { type: Number },
 });
+
+bookSchema.plugin(mongodbErrorHandler);
 
 module.exports = mongoose.model("Book", bookSchema);
