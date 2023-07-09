@@ -2,4 +2,6 @@
 
 npm install pour installer les dépendences
 
-nodemon pour demarrer le server
+nodemon server pour demarrer le serveur
+
+port par défaut : 4000

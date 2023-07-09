@@ -1,9 +1,7 @@
 const passwordValidator = require("password-validator");
 
 const passwordSchema = new passwordValidator();
-/*.min(3, "mot de passe trop petit")
-  .digits(1, "le mot de passe doit comporter au moins un  chiffre")
-  .uppercase(1, "le mot de passe doit comporter au moins une majuscule");*/
+//le mot de passe doit contenir au moins 3 caractères, une majuscule et 1 chiffre
 
 passwordSchema
   .is()
@@ -20,7 +18,7 @@ module.exports = (req, res, next) => {
   if (passwordSchema.validate(req.body.password)) {
     next();
   } else {
-    return res.status(400).json({
+    return res.status(401).json({
       error:
         "le mot de passe n'est pas assez fort " +
         passwordSchema.validate(req.body.password, { details: true }),

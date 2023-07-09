@@ -19,7 +19,7 @@ const app = express();
 app.use(express.json());
 app.use(
   helmet({
-    crossOriginEmbedderPolicy: false,
+    crossOriginResourcePolicy: false,
   })
 );
 
@@ -39,7 +39,6 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(rateLimit);
 app.use("/api/books", bookRoutes);
 app.use("/api/auth", userRoutes);
 app.use("/images", express.static(path.join(__dirname, "images")));
